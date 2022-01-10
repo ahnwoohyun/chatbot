@@ -17,8 +17,11 @@ train_intents = train_data['intent_id'].tolist()
 test_sentences = test_data['sentence'].tolist()
 test_intents = test_data['intent_id'].tolist()
 
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname('utils'))))))
 from utils.preprocess import Preprocess
-p = Preprocess(word2index_dic='../../dict/chatbot_dict.bin')
+p = Preprocess(word2index_dic='../../dict/chatbot_dict.bin', synonym_dic='../../dict/synonym_dict.csv')
 
 # 단어 시퀀스 생성
 train_sequences = []

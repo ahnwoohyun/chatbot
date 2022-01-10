@@ -43,6 +43,7 @@ class IntentModel:
         
         #predict = float(self.model.predict(padded_seqs))
         predict = self.model.predict(padded_seqs)
+        print(predict)
         predict_class = tf.math.argmax(predict, axis=1)
         #print(predict_class)
         return predict_class.numpy()[0]
@@ -57,7 +58,7 @@ if __name__ == '__main__':
     parser.add_argument('-m', default='predict') 
     parser.add_argument('-q', required=True, default=None) #query
 
-    p = Preprocess(word2index_dic='../../dict/chatbot_dict.bin')
+    p = Preprocess(word2index_dic='../../dict/chatbot_dict.bin', synonym_dic='../../dict/synonym_dict.csv')
     intent = IntentModel(model_name='intent_model.h5', preprocess=p)
     args = parser.parse_args()
     
