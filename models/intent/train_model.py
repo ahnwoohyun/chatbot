@@ -91,7 +91,7 @@ model = Model(inputs=input_layer, outputs=predictions)
 model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
-mc = ModelCheckpoint('intent_model.h5', monitor='accuracy', mode='max', verbose=1, save_best_only=True)
+mc = ModelCheckpoint('intent_model.h5', monitor='val_accuracy', mode='max', verbose=1, save_best_only=True)
 
 # 모델 학습
 model.fit(X_train, y_train, callbacks=[mc], batch_size=64, validation_split=0.2, epochs=EPOCH, verbose=1)

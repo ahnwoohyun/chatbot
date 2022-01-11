@@ -23,8 +23,8 @@ class Preprocess:
         # 형태소 분석기
         self.mecab = Mecab()
 
-        # 추출할 형태소 
-        self.include_tags = ['NNG', 'NNP', 'NNB', 'VV', 'SL', 'SN', 'EC', 'EF', 'VX']
+        # 제외할 형태소 
+        self.exclusion_tags = ['JKS', 'JKC', 'JKG', 'JKO', 'JKB', 'JKV', 'JKQ', 'JC', 'JX', 'EP', 'EF', 'EC', 'ETN', 'ETM']
 
     # 형태소 분석기 POS tagging
     def pos(self, sentence):
@@ -32,10 +32,10 @@ class Preprocess:
 
     # 불용어 제거 후 필요한 품사정보만 가져오기 및 동의어 변환
     def get_keywords(self, pos, include_tag=False):
-        f = lambda x: x in self.include_tags
+        f = lambda x: x in self.exclusion_tags
         word_list = []
         for p in pos:
-            if f(p[1]) is True:
+            if f(p[1]) is False:
                 word_list.append(p if include_tag is True else p[0])
 
         for idx in range(len(word_list)):
