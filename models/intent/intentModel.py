@@ -1,15 +1,9 @@
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname('utils'))))))
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 from tensorflow.keras import preprocessing
 from tensorflow.keras.preprocessing import sequence
-import argparse
-from utils.preprocess import Preprocess
-
-
-
 
 
 
@@ -40,28 +34,20 @@ class IntentModel:
 
         # 패딩 처리
         padded_seqs = preprocessing.sequence.pad_sequences(sequences, maxlen=MAX_SEQ_LEN, padding='post')
-        
+        #print(padded_seqs)
         #predict = float(self.model.predict(padded_seqs))
         predict = self.model.predict(padded_seqs)
-        print(predict)
-        predict_class = tf.math.argmax(predict, axis=1)
-        #print(predict_class)
-        return predict_class.numpy()[0]
+        print(predict)        
+        if predict.max() < 0.5:
+            return 2
+        else:
+            predict_class = tf.math.argmax(predict, axis=1)
+            return predict_class.numpy()[0]
+        
         #print('==========result==========')
         #if(predict > 0.5):
         #    print("{:.2f}% 확률로 문서공유 의도로 분류됩니다.\n".format(predict * 100))
         #else:
         #    print("{:.2f}% 확률로 문서검색 의도로 분류됩니다.\n".format((1 - predict) * 100))
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-m', default='predict') 
-    parser.add_argument('-q', required=True, default=None) #query
-
-    p = Preprocess(word2index_dic='../../dict/chatbot_dict.bin', synonym_dic='../../dict/synonym_dict.csv')
-    intent = IntentModel(model_name='intent_model.h5', preprocess=p)
-    args = parser.parse_args()
-    
-    predict = intent.predict_class(args.q)
-    print(intent.labels[predict], "의도로 분류됩니다.")
     
